@@ -1,9 +1,8 @@
 import { Box, FormControl, FormLabel, Input, VStack } from "@chakra-ui/react";
+import debounce from "lodash.debounce";
 import { useEffect, useState } from "react";
-import Header from "../../components/Header";
 import useUserLocation from "../../hooks/useUserLocation";
 import PublicLayout from "../../layouts/public";
-import debounce from "lodash.debounce";
 
 export default function PublicIndexPage() {
   const {

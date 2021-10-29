@@ -14,8 +14,14 @@ export default function Home() {
     <Container centerContent minH="100vh">
       <Flex height="100vh" alignItems="center">
         <VStack spacing={8}>
+          <Image
+            src="/icons/icon-72x72.png"
+            width={72}
+            height={72}
+            alt="Logo"
+          />
+
           <Heading>App Name</Heading>
-          <Image src="/vercel.svg" width={72} height={24} alt="Logo" />
 
           <Link href="/bus/login" passHref>
             <Button size="lg">Bus</Button>
