@@ -173,7 +173,7 @@ def new_bus():
         sc_time.append(slot['time'])
         sc_pid.append(slot['place_id'])
     reg=args["reg"]
-    Bus(bid=LATEST_BID+1,reg=reg,sc_lat=sc_lat,sc_long=sc_long,sc_pid=sc_pid ,sc_name=sc_name,sc_time=sc_time).save()
+    Bus(bid=LATEST_BID+1,reg=reg,sc_lat=sc_lat,sc_long=sc_long,sc_pid=sc_pid ,sc_name=sc_name,sc_time=sc_time,curr_lat=0.0,curr_long=0.0, curr_lat=0.0,next_dest=sc_pid[0]).save()
     LATEST_BID+=1
     return make_response("",200)
 
