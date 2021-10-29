@@ -1,19 +1,22 @@
 import {
-  Box,
   Button,
   Container,
   Flex,
-  Heading,
-  VStack,
+  FormControl,
   FormErrorMessage,
   FormLabel,
-  FormControl,
+  Heading,
   Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightElement,
+  VStack,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import Link from "../../components/Link";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import Link from "../../components/Link";
 
 const schema = yup
   .object({
@@ -35,6 +38,9 @@ export default function BusLoginPage() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => setShowPassword((prevState) => !prevState);
 
   function onSubmit(values) {
     return new Promise((resolve) => {
@@ -55,23 +61,33 @@ export default function BusLoginPage() {
             <VStack spacing={4}>
               <FormControl isInvalid={errors.phone}>
                 <FormLabel htmlFor="phone">Phone Number</FormLabel>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="1234567890"
-                  {...register("phone")}
-                />
+                <InputGroup>
+                  <InputLeftAddon children="+91" />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="1234567890"
+                    {...register("phone")}
+                  />
+                </InputGroup>
                 <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
               </FormControl>
 
               <FormControl isInvalid={errors.password}>
                 <FormLabel htmlFor="password">Password</FormLabel>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="password"
-                  {...register("password")}
-                />
+                <InputGroup>
+                  <Input
+                    id="password"
+                    type={!showPassword ? "password" : "text"}
+                    placeholder="password"
+                    {...register("password")}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button size="sm" onClick={toggleShowPassword}>
+                      {showPassword ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
               </FormControl>
 

@@ -9,11 +9,15 @@ import {
   FormLabel,
   FormControl,
   Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import Link from "../../components/Link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useState } from "react";
 
 const schema = yup
   .object({
@@ -28,13 +32,6 @@ const schema = yup
       .string()
       .oneOf([yup.ref("password"), null], "Passwords must match")
       .required("Required"),
-    reg: yup
-      .string()
-      .trim()
-      .matches(
-        /^[A-Z]{2}[0-9]{2}[A-Z]{1}[0-9]{4}$/,
-        "Must match the given format, eg: GA01T1234"
-      ),
   })
   .required();
 
@@ -46,6 +43,9 @@ export default function BusRegisterPage() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => setShowPassword((prevState) => !prevState);
 
   function onSubmit(values) {
     return new Promise((resolve) => {
@@ -66,23 +66,33 @@ export default function BusRegisterPage() {
             <VStack spacing={4}>
               <FormControl isInvalid={errors.phone}>
                 <FormLabel htmlFor="phone">Phone Number</FormLabel>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="1234567890"
-                  {...register("phone")}
-                />
+                <InputGroup>
+                  <InputLeftAddon children="+91" />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="1234567890"
+                    {...register("phone")}
+                  />
+                </InputGroup>
                 <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
               </FormControl>
 
               <FormControl isInvalid={errors.password}>
                 <FormLabel htmlFor="password">Password</FormLabel>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="password"
-                  {...register("password")}
-                />
+                <InputGroup>
+                  <Input
+                    id="password"
+                    type={!showPassword ? "password" : "text"}
+                    placeholder="password"
+                    {...register("password")}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button size="sm" onClick={toggleShowPassword}>
+                      {showPassword ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
               </FormControl>
 
@@ -92,19 +102,13 @@ export default function BusRegisterPage() {
                 </FormLabel>
                 <Input
                   id="confirmPassword"
-                  type="password"
+                  type={!showPassword ? "password" : "text"}
                   placeholder="confirm password"
                   {...register("confirmPassword")}
                 />
                 <FormErrorMessage>
                   {errors.confirmPassword?.message}
                 </FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={errors.reg}>
-                <FormLabel htmlFor="reg">Registration Number</FormLabel>
-                <Input id="reg" placeholder="GA01T1234" {...register("reg")} />
-                <FormErrorMessage>{errors.reg?.message}</FormErrorMessage>
               </FormControl>
 
               <Button isFullWidth mt={4} isLoading={isSubmitting} type="submit">
