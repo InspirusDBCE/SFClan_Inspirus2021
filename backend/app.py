@@ -115,6 +115,25 @@ def token_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def token_required_get_user(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers['x-access-token']
+        print (token)
+
+        if not token:
+            return jsonify({'message' : 'Token is missing'})
+        
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms = 'HS256')
+            print(data)
+            BusMan = BusManager.objects(phone = data['phone']).first()
+        except Exception as e:
+            print (e)
+            return jsonify({'message':'Token is invalid'})
+
+        return f(BusMan,*args, **kwargs)
+    return decorated
 #Login
 @app.route('/login',methods=['POST'])
 def query_logins():
@@ -148,18 +167,22 @@ def authen():
 
     
 
-@app.route('/bus',methods=['POST'])
-@token_required
-def new_bus():
-    global LATEST_BID
-    token = request.headers['x-access-token']
-    phone=jwt.decode(token, app.config['SECRET_KEY'], algorithms = 'HS256',options={"verify_signature": False})['phone']
-    current_user=BusManager.objects(phone=phone).first()
-    print(current_user) 
-    newBusIds=current_user.busIds
-    print(newBusIds)
-    newBusIds.append(LATEST_BID+1)
+@app.route('/userbus',methods=['GET'])
+@token_required_get_user
+def get_bus(current_user):
+    ids=current_user.busIds
+    my_buses=[]
+    for bus in Bus.objects:
+        if bus.bid in ids :
+            my_buses.append(bus)
+    return jsonify(my_buses)
 
+@app.route('/bus',methods=['POST'])
+@token_required_get_user
+def new_bus(current_user):
+    global LATEST_BID
+    newBusIds=current_user.busIds
+    newBusIds.append(LATEST_BID+1)
     newBusIds=list(set(newBusIds))
 
 
