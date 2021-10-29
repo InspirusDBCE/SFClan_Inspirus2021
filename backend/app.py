@@ -33,7 +33,7 @@ bcrypt = Bcrypt(app)
 #Models
 class BusManager(db.Document):
     manager_id= db.StringField()
-    phoneno = db.IntField()
+    phone_no = db.IntField()
     password= db.StringField()
     busIds= db.ListField(db.IntField())
     def to_json(self):
@@ -42,8 +42,8 @@ class BusManager(db.Document):
                 "manager_id": self.id
                 }
 
-# BusManager(phoneno=123,password="alsdkjas",busIds=[12]).save()
-# BusManager(phoneno=4,password = "alsdkjas",manager_id="123",busIds=[12,13,14,15]).save()
+# BusManager(phone_no=123,password="alsdkjas",busIds=[12]).save()
+#BusManager(phone_no=4,password = "alsdkjas",manager_id="123",busIds=[12,13,14,15]).save()
 
 app.config['SECRET_KEY'] = 'phonixlodu'
 
@@ -59,7 +59,7 @@ def token_required(f):
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms = 'HS256')
             print(data)
-            BusMan = BusManager.objects(phoneno = data['phoneno']).first()
+            BusMan = BusManager.objects(phone_no = data['phone_no']).first()
         except Exception as e:
             print (e)
             return jsonify({'message':'Token is invalid'})
@@ -70,10 +70,10 @@ def token_required(f):
 #Login
 @app.route('/login',methods=['POST'])
 def query_logins():
-    phoneno = request.get_json().get("phoneno")
+    phone_no = request.get_json().get("phone")
     password = request.get_json().get("password")
     print(request.get_json())
-    obj = BusManager.objects(phoneno = phoneno)
+    obj = BusManager.objects(phone_no = phone_no)
     print(password, obj.first().to_json()['password'])
     #print(obj.first.password, password)
     #return obj
@@ -81,7 +81,7 @@ def query_logins():
         # resp=make_response('set cookie')
         # resp.set_cookie(COOKIE_NAME,obj.id)
         # return jsonify({"cookie":obj.id})
-        token = jwt.encode({'phoneno' : phoneno, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
+        token = jwt.encode({'phone_no' : phone_no, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
 
         return jsonify({'token' : token})
     else:
