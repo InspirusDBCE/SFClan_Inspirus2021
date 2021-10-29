@@ -28,3 +28,7 @@ export const getToken = () => {
   const { token } = parseCookies();
   return token;
 };
+
+export const removeToken = () => {
+  destroyCookie(null, "token");
+};
