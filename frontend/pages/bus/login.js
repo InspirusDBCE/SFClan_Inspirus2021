@@ -13,10 +13,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import Link from "../../components/Link";
+import useAuth from "../../contexts/auth";
+import PublicLayout from "../../layouts/public";
 
 const schema = yup
   .object({
@@ -39,67 +42,72 @@ export default function BusLoginPage() {
     resolver: yupResolver(schema),
   });
   const [showPassword, setShowPassword] = useState(false);
+  const { user, login } = useAuth();
+  const { push } = useRouter();
+
+  useEffect(() => {
+    if (user) push("/bus/dashboard");
+  }, [user]);
 
   const toggleShowPassword = () => setShowPassword((prevState) => !prevState);
 
   function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
-    });
+    login(values);
   }
 
   return (
-    <Container centerContent minH="100vh" bg="blue.400">
-      <Flex height="100vh" alignItems="center">
-        <VStack spacing={8}>
-          <Heading>Bus Login</Heading>
+    <PublicLayout>
+      <VStack spacing={8}>
+        <Heading>Bus Login</Heading>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <VStack spacing={4}>
-              <FormControl isInvalid={errors.phone}>
-                <FormLabel htmlFor="phone">Phone Number</FormLabel>
-                <InputGroup>
-                  <InputLeftAddon children="+91" />
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="1234567890"
-                    {...register("phone")}
-                  />
-                </InputGroup>
-                <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
-              </FormControl>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <VStack spacing={4}>
+            <FormControl isInvalid={errors.phone}>
+              <FormLabel htmlFor="phone">Phone Number</FormLabel>
+              <InputGroup>
+                <InputLeftAddon children="+91" />
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="1234567890"
+                  {...register("phone")}
+                />
+              </InputGroup>
+              <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
+            </FormControl>
 
-              <FormControl isInvalid={errors.password}>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <InputGroup>
-                  <Input
-                    id="password"
-                    type={!showPassword ? "password" : "text"}
-                    placeholder="password"
-                    {...register("password")}
-                  />
-                  <InputRightElement width="4.5rem">
-                    <Button size="sm" onClick={toggleShowPassword}>
-                      {showPassword ? "Hide" : "Show"}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-              </FormControl>
+            <FormControl isInvalid={errors.password}>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <InputGroup>
+                <Input
+                  id="password"
+                  type={!showPassword ? "password" : "text"}
+                  placeholder="password"
+                  {...register("password")}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button size="sm" onClick={toggleShowPassword}>
+                    {showPassword ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            </FormControl>
 
-              <Button isFullWidth mt={4} isLoading={isSubmitting} type="submit">
-                Login Now
-              </Button>
-            </VStack>
-          </form>
+            <Button
+              isFullWidth
+              mt={4}
+              isLoading={isSubmitting}
+              type="submit"
+              color="blue.400"
+            >
+              Login Now
+            </Button>
+          </VStack>
+        </form>
 
-          <Link href="/bus/register">Don't have an account? Register Now</Link>
-        </VStack>
-      </Flex>
-    </Container>
+        <Link href="/bus/register">Don't have an account? Register Now</Link>
+      </VStack>
+    </PublicLayout>
   );
 }

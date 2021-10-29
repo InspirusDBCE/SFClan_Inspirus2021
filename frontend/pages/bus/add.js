@@ -19,6 +19,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useColorModeValue,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
@@ -32,6 +33,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import useUserLocation from "../../hooks/useUserLocation";
 import { formatTime } from "../../utils";
+import withAuth from "../../components/withAuth";
 
 const schema = yup
   .object({
@@ -47,7 +49,7 @@ const schema = yup
 
 let temp = null;
 
-export default function BusAddPage() {
+function BusAddPage() {
   const {
     handleSubmit,
     register,
@@ -82,7 +84,7 @@ export default function BusAddPage() {
   function onSubmit(values) {
     return new Promise((resolve) => {
       setTimeout(() => {
-        alert(JSON.stringify({ ...values, ...schedule }, null, 2));
+        alert(JSON.stringify({ ...values, schedule }, null, 2));
         resolve();
       }, 3000);
     });
@@ -90,7 +92,7 @@ export default function BusAddPage() {
 
   const handleSearch = debounce((e) => {
     setSearch(e.target.value);
-  }, 300);
+  }, 400);
 
   useEffect(() => {
     if (!userLocationLoaded || !search) return;
@@ -158,68 +160,70 @@ export default function BusAddPage() {
   };
 
   return (
-    <Container minH="100vh" bg="blue.400">
-      <Box p={4}>
-        <Heading>Add Bus</Heading>
+    <>
+      <Heading>Add Bus</Heading>
 
-        <Box mt={4}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <VStack spacing={4} textAlign="left">
-              <FormControl isInvalid={errors.reg}>
-                <FormLabel htmlFor="reg">Registration Number</FormLabel>
-                <Input id="reg" placeholder="GA01T1234" {...register("reg")} />
-                <FormErrorMessage>{errors.reg?.message}</FormErrorMessage>
-              </FormControl>
+      <Box mt={4}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <VStack spacing={4} textAlign="left">
+            <FormControl isInvalid={errors.reg}>
+              <FormLabel htmlFor="reg">Registration Number</FormLabel>
+              <Input id="reg" placeholder="GA01T1234" {...register("reg")} />
+              <FormErrorMessage>{errors.reg?.message}</FormErrorMessage>
+            </FormControl>
 
-              <Divider />
+            <Divider />
 
-              <Box width="100%" pb={8}>
-                <Flex justifyContent="space-between" alignItems="center">
-                  <Heading size="md" colorScheme="gray">
-                    Schedule
-                  </Heading>
+            <Box width="100%" pb={8}>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Heading size="md" colorScheme="gray">
+                  Schedule
+                </Heading>
 
-                  <Button onClick={onOpen} size="sm">
-                    Add Location
-                  </Button>
-                </Flex>
+                <Button onClick={onOpen} size="sm">
+                  Add Location
+                </Button>
+              </Flex>
 
-                <VStack>
-                  {schedule.map((item) => (
-                    <Flex
-                      key={item.place_id}
-                      bg="blue.200"
-                      borderRadius="md"
-                      mt={4}
-                      p={2}
-                      width="100%"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <Text fontWeight="semibold">{`${item.name} - ${item.time}`}</Text>
+              <VStack>
+                {schedule.map((item) => (
+                  <Flex
+                    key={item.place_id}
+                    bg={useColorModeValue("blue.400", "blue.200")}
+                    borderRadius="md"
+                    mt={4}
+                    p={2}
+                    width="100%"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Text
+                      fontWeight="semibold"
+                      textColor={useColorModeValue("white", "gray.900")}
+                    >{`${item.name} - ${item.time}`}</Text>
 
-                      <IconButton
-                        aria-label="delete location from schedule"
-                        icon={<DeleteIcon />}
-                        size="sm"
-                        onClick={() => handleRemoveLocation(item.place_id)}
-                      />
-                    </Flex>
-                  ))}
-                </VStack>
-              </Box>
+                    <IconButton
+                      aria-label="delete location from schedule"
+                      icon={<DeleteIcon color={"orange.400"} />}
+                      size="sm"
+                      onClick={() => handleRemoveLocation(item.place_id)}
+                    />
+                  </Flex>
+                ))}
+              </VStack>
+            </Box>
 
-              <Button
-                isFullWidth
-                isLoading={isSubmitting}
-                disabled={schedule.length === 0}
-                type="submit"
-              >
-                Add Bus Now
-              </Button>
-            </VStack>
-          </form>
-        </Box>
+            <Button
+              isFullWidth
+              isLoading={isSubmitting}
+              disabled={schedule.length === 0}
+              type="submit"
+              color={useColorModeValue("blue.600", "blue.400")}
+            >
+              Add Bus Now
+            </Button>
+          </VStack>
+        </form>
       </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -229,13 +233,16 @@ export default function BusAddPage() {
           <ModalCloseButton />
           <ModalBody>
             <Input placeholder="Location to add" onChange={handleSearch} />
-            <Datetime
-              initialViewMode="time"
-              dateFormat={false}
-              input={false}
-              value={time}
-              onChange={handleTimeChange}
-            />
+
+            <Box color={useColorModeValue("gray.900", "white")} mt={2}>
+              <Datetime
+                initialViewMode="time"
+                dateFormat={false}
+                input={false}
+                value={time}
+                onChange={handleTimeChange}
+              />
+            </Box>
 
             <Box id="map" minHeight={200} mt={4} width="100%" />
           </ModalBody>
@@ -251,6 +258,8 @@ export default function BusAddPage() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Container>
+    </>
   );
 }
+
+export default withAuth(BusAddPage);

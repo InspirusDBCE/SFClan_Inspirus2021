@@ -8,31 +8,32 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import withAuth from "../../components/withAuth";
 
-export default function BusDashboardPage() {
+function BusDashboardPage() {
   return (
-    <Container minH="100vh" bg="blue.400">
-      <Box p={4}>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Heading>Dashboard</Heading>
+    <>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Heading>Dashboard</Heading>
 
-          <Link href="/bus/add">
-            <Button variant="outline">Add Bus</Button>
+        <Link href="/bus/add">
+          <Button variant="outline">Add Bus</Button>
+        </Link>
+      </Flex>
+
+      <Box mt={8}>
+        <VStack spacing={8} alignItems="stretch">
+          <Link href="/bus/1">
+            <Button>GA01T1234</Button>
           </Link>
-        </Flex>
 
-        <Box mt={8}>
-          <VStack spacing={8}>
-            <Link href="/bus/1">
-              <Button>Bus 1</Button>
-            </Link>
-
-            <Link href="/bus/2">
-              <Button>Bus 2</Button>
-            </Link>
-          </VStack>
-        </Box>
+          <Link href="/bus/2">
+            <Button>GA02T1234</Button>
+          </Link>
+        </VStack>
       </Box>
-    </Container>
+    </>
   );
 }
+
+export default withAuth(BusDashboardPage);

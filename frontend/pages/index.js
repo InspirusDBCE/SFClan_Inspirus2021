@@ -11,13 +11,13 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <Container centerContent minH="100vh" bg="blue.400">
+    <Container centerContent minH="100vh">
       <Flex height="100vh" alignItems="center">
         <VStack spacing={8}>
           <Heading>App Name</Heading>
           <Image src="/vercel.svg" width={72} height={24} />
 
-          <Link href="/bus">
+          <Link href="/bus/login">
             <Button size="lg">Bus</Button>
           </Link>
 

@@ -17,7 +17,9 @@ import { useForm } from "react-hook-form";
 import Link from "../../components/Link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useAuth from "../../contexts/auth";
+import { useRouter } from "next/router";
 
 const schema = yup
   .object({
@@ -44,20 +46,21 @@ export default function BusRegisterPage() {
     resolver: yupResolver(schema),
   });
   const [showPassword, setShowPassword] = useState(false);
+  const { user, register: registerUser } = useAuth();
+  const { push } = useRouter();
+
+  useEffect(() => {
+    if (user) push("/bus/dashboard");
+  }, [user]);
 
   const toggleShowPassword = () => setShowPassword((prevState) => !prevState);
 
   function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
-    });
+    registerUser(values);
   }
 
   return (
-    <Container centerContent minH="100vh" bg="blue.400">
+    <Container centerContent minH="100vh">
       <Flex height="100vh" alignItems="center">
         <VStack spacing={8}>
           <Heading>Bus Register</Heading>
@@ -111,7 +114,13 @@ export default function BusRegisterPage() {
                 </FormErrorMessage>
               </FormControl>
 
-              <Button isFullWidth mt={4} isLoading={isSubmitting} type="submit">
+              <Button
+                isFullWidth
+                mt={4}
+                isLoading={isSubmitting}
+                type="submit"
+                color="blue.400"
+              >
                 Register Now
               </Button>
             </VStack>
