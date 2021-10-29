@@ -19,13 +19,13 @@ function MyApp({ Component, pageProps }) {
 
           <link rel="manifest" href="/manifest.json" />
           <link
-            href="/icons/favicon-72x72.png"
+            href="/icons/icon-72x72.png"
             rel="icon"
             type="image/png"
             sizes="72x72"
           />
           <link
-            href="/icons/favicon-96x96.png"
+            href="/icons/icon-96x96.png"
             rel="icon"
             type="image/png"
             sizes="96x96"

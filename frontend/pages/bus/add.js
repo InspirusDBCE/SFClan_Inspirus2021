@@ -22,6 +22,7 @@ import {
   useColorModeValue,
   useDisclosure,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import debounce from "lodash.debounce";
@@ -34,6 +35,7 @@ import * as yup from "yup";
 import useUserLocation from "../../hooks/useUserLocation";
 import { formatTime } from "../../utils";
 import withAuth from "../../components/withAuth";
+import Bus from "../../apis/bus";
 
 const schema = yup
   .object({
@@ -71,23 +73,38 @@ function BusAddPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [search, setSearch] = useState("");
   const [time, setTime] = useState(moment());
-  const [schedule, setSchedule] = useState([
-    {
-      lat: 15.2878,
-      lng: 73.9562,
-      place_id: "ChIJKTkEel-xvzsRXP6Q54CUkoo",
-      name: "Margao Bus Terminal",
-      time: "6:43",
-    },
-  ]);
+  const [schedule, setSchedule] = useState([]);
+  const toast = useToast();
 
-  function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify({ ...values, schedule }, null, 2));
-        resolve();
-      }, 3000);
-    });
+  async function onSubmit(values) {
+    try {
+      await Bus.add({ ...values, schedule });
+
+      toast({
+        title: "Bus added",
+        description: "We've added the bus for you",
+        status: "success",
+      });
+
+      setSchedule([]);
+      temp = null;
+      setValue("reg", "");
+    } catch (err) {
+      console.error(err);
+
+      if (err?.response?.status >= 500)
+        toast({
+          title: "Something went wrong",
+          description: "Please Try again",
+          status: "warning",
+        });
+      else
+        toast({
+          title: "Failed to add bus",
+          description: "Please Try again",
+          status: "warning",
+        });
+    }
   }
 
   const handleSearch = debounce((e) => {

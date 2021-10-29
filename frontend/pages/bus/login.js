@@ -75,7 +75,6 @@ export default function BusLoginPage() {
               </InputGroup>
               <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
             </FormControl>
-
             <FormControl isInvalid={errors.password}>
               <FormLabel htmlFor="password">Password</FormLabel>
               <InputGroup>
@@ -92,6 +91,10 @@ export default function BusLoginPage() {
                 </InputRightElement>
               </InputGroup>
               <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={error}>
+              <FormErrorMessage>{error}</FormErrorMessage>
             </FormControl>
 
             <Button
