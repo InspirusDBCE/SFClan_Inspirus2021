@@ -6,25 +6,21 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+export default function BusIndexPage() {
   return (
     <Container centerContent minH="100vh" bg="blue.400">
       <Flex height="100vh" alignItems="center">
         <VStack spacing={8}>
-          <Heading>App Name</Heading>
-          <Image src="/vercel.svg" width={72} height={24} />
+          <Heading>Bus</Heading>
 
-          <Link href="/bus">
-            <Button size="lg">Bus</Button>
+          <Link href="/bus/login">
+            <Button>Login</Button>
           </Link>
 
-          <Link href="/public">
-            <Button size="lg" component="a">
-              Public
-            </Button>
+          <Link href="/bus/register">
+            <Button>Register</Button>
           </Link>
         </VStack>
       </Flex>
