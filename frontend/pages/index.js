@@ -11,17 +11,17 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <Container centerContent minH="100vh" bg="blue.400">
+    <Container centerContent minH="100vh">
       <Flex height="100vh" alignItems="center">
         <VStack spacing={8}>
           <Heading>App Name</Heading>
-          <Image src="/vercel.svg" width={72} height={24} />
+          <Image src="/vercel.svg" width={72} height={24} alt="Logo" />
 
-          <Link href="/bus">
+          <Link href="/bus/login" passHref>
             <Button size="lg">Bus</Button>
           </Link>
 
-          <Link href="/public">
+          <Link href="/public" passHref>
             <Button size="lg" component="a">
               Public
             </Button>

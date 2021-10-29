@@ -14,3 +14,12 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.rdtPicker {
+  background: inherit !important;
+  border: none !important;
+}
+
+.rdtBtn:hover {
+  background: inherit !important;
+}
