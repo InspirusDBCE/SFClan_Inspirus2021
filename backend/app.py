@@ -79,7 +79,6 @@ class Bus(db.Document):
 def get_bid():
     global LATEST_BID    
     for bus in Bus.objects():
-        print(bus,bus.bid)
         if LATEST_BID<bus.bid:
             LATEST_BID=bus.bid
     return LATEST_BID
@@ -99,17 +98,14 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers['x-access-token']
-        print (token)
 
         if not token:
             return jsonify({'message' : 'Token is missing'})
         
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms = 'HS256')
-            print(data)
             BusMan = BusManager.objects(phone = data['phone']).first()
         except Exception as e:
-            print (e)
             return jsonify({'message':'Token is invalid'})
 
         return f(*args, **kwargs)
@@ -119,17 +115,14 @@ def token_required_get_user(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers['x-access-token']
-        print (token)
 
         if not token:
             return jsonify({'message' : 'Token is missing'})
         
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms = 'HS256')
-            print(data)
             BusMan = BusManager.objects(phone = data['phone']).first()
         except Exception as e:
-            print (e)
             return jsonify({'message':'Token is invalid'})
 
         return f(BusMan,*args, **kwargs)
@@ -139,9 +132,7 @@ def token_required_get_user(f):
 def query_logins():
     phone = request.get_json().get("phone")
     password = request.get_json().get("password")
-    print(request.get_json())
     obj = BusManager.objects(phone = phone)
-    print(password, obj.first().to_json()['password'])
 
     if obj and password == obj.first().password:
 
@@ -157,7 +148,6 @@ def okok():
 
 @app.route('/nearby',methods=['POST'])
 def nearby():
-    
     return jsonify(Bus.objects()[:5])
 
 @app.route('/authentication',methods=['GET'])
@@ -165,7 +155,15 @@ def nearby():
 def authen():
     return jsonify({"message" : "you're authenticated bitch"})
 
-    
+@app.route('/registration',methods=['POST'])    
+def register():
+    args = request.get_json()
+    phone=args['phone']
+    password=args['password'] 
+    BusManager(phone=phone,password=password,busIds=[]).save()
+    return make_response("",200)
+
+
 
 @app.route('/userbus',methods=['GET'])
 @token_required_get_user
