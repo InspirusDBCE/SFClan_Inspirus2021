@@ -1,4 +1,5 @@
 import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { COOKIE_CONFIG } from "../config/constants";
 
 export function formatTime(mTime) {
   const { hours, minutes } = mTime.toObject();
@@ -8,10 +9,7 @@ export function formatTime(mTime) {
 const key = "user";
 
 export const storeUser = (user) => {
-  setCookie(null, key, user, {
-    maxAge: 30 * 24 * 60 * 60,
-    path: "/",
-  });
+  setCookie(null, key, String(user), COOKIE_CONFIG);
 };
 
 export const getUser = () => {
@@ -21,4 +19,12 @@ export const getUser = () => {
 
 export const removeUser = () => {
   destroyCookie(null, key);
+};
+
+export const storeToken = (token) =>
+  setCookie(null, "token", token, COOKIE_CONFIG);
+
+export const getToken = () => {
+  const { token } = parseCookies();
+  return token;
 };

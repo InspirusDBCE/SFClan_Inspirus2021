@@ -42,7 +42,7 @@ export default function BusLoginPage() {
     resolver: yupResolver(schema),
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { user, login } = useAuth();
+  const { user, login, error } = useAuth();
   const { push } = useRouter();
 
   useEffect(() => {

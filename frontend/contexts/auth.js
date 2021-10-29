@@ -1,6 +1,6 @@
 import Loader from "../components/Loader";
 import Auth from "../apis/auth";
-import { storeUser, removeUser, getUser } from "../utils";
+import { storeUser, removeUser, getUser, storeToken } from "../utils";
 import Router from "next/router";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
@@ -15,14 +15,18 @@ export const AuthProvider = ({ children }) => {
     try {
       setError("");
 
-      await Auth.login(data);
+      const {
+        data: { token },
+      } = await Auth.login(data);
+
+      storeToken(token);
 
       setUser(data.phone);
-      storeUser(foundUser);
+      storeUser(data.phone);
       Router.push("/bus/dashboard");
     } catch (err) {
       console.error(err);
-      setError(err?.message);
+      setError(err?.message || "Something went wrong");
     }
   };
 

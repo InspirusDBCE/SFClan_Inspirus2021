@@ -10,11 +10,13 @@ from flask_bcrypt import Bcrypt
 from functools import wraps
 # import jwt
 import json
+from flask_cors import CORS
 
 
 
 # MongoDB setup
 app = Flask(__name__)
+CORS(app)
 mongodb_password="testtest69#"
 database_name = "bustracker"
 DB_URI = "mongodb+srv://temp:hEgyJQPdSa3OMMDD@bustracker.awm8x.mongodb.net/test"
@@ -48,7 +50,7 @@ def password_hash(password):
     return bcrypt.hashpw(password.encode("utf-8"),CANDIDATE)
 
 # BusManager(phone=123,password="alsdkjas",busIds=[12]).save()
-#BusManager(phone=4,password = "alsdkjas",manager_id="123",busIds=[12,13,14,15]).save()
+#  BusManager(phone=1234567890,password = "alsdkjas",manager_id="123",busIds=[12,13,14,15]).save()
 
 app.config['SECRET_KEY'] = 'phonixlodu'
 
