@@ -54,6 +54,7 @@ class Bus(db.Document):
     curr_lat=db.FloatField()
     curr_long=db.FloatField()
     next_dest=db.StringField()
+    time_since_update=db.IntField()
 
     def to_json(self):
         sched=[]
@@ -73,6 +74,7 @@ class Bus(db.Document):
                 "password": self.password,
                 "manager_id": self.id
                 }
+
 
 def get_bid():
     global LATEST_BID    
@@ -134,7 +136,10 @@ def query_logins():
 def okok():
     return 'hello'
 
-
+@app.route('/nearby',methods=['POST'])
+def nearby():
+    
+    return jsonify(Bus.objects()[:5])
 
 @app.route('/authentication',methods=['GET'])
 @token_required
@@ -155,7 +160,7 @@ def new_bus():
     print(newBusIds)
     newBusIds.append(LATEST_BID+1)
 
-    list(set(newBusIds))
+    newBusIds=list(set(newBusIds))
 
 
     current_user.update(busIds=newBusIds)
@@ -173,7 +178,7 @@ def new_bus():
         sc_time.append(slot['time'])
         sc_pid.append(slot['place_id'])
     reg=args["reg"]
-    Bus(bid=LATEST_BID+1,reg=reg,sc_lat=sc_lat,sc_long=sc_long,sc_pid=sc_pid ,sc_name=sc_name,sc_time=sc_time,curr_lat=0.0,curr_long=0.0, curr_lat=0.0,next_dest=sc_pid[0]).save()
+    Bus(bid=LATEST_BID+1,reg=reg,sc_lat=sc_lat,sc_long=sc_long,sc_pid=sc_pid ,sc_name=sc_name,sc_time=sc_time,curr_long=0.0, curr_lat=0.0,next_dest=sc_pid[0],time_since_update=0).save()
     LATEST_BID+=1
     return make_response("",200)
 
