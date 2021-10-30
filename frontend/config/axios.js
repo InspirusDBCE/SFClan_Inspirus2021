@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_BASE_URL as baseURL } from "./constants";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { getToken, removeUser } from "../utils";
+import { getToken, removeToken, removeUser } from "../utils";
 import Router from "next/router";
 
 const headers = {
@@ -17,9 +17,10 @@ const unauthorizedRequestHandler = async () => {
   console.error("Token probably expired, need to login again");
 
   // Clear auth data
-  removeUser();
+  // removeUser();
+  // removeToken();
 
-  Router.push("/bus/login");
+  Router.push("/bus/login?logout=true");
 
   throw new Error("Token probably expired, need to login again");
 };

@@ -1,11 +1,11 @@
 from logging import debug
 from flask import Flask, config, request, jsonify, make_response
-import jwt  
+import jwt
 import datetime
 from flask import g, request, abort
 from flask_mongoengine import MongoEngine
 from flask_mongoengine.wtf import model_form
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user 
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from functools import wraps
 import requests
@@ -29,7 +29,7 @@ app.config["MONGODB_HOST"] = DB_URI
 db = MongoEngine()
 db.init_app(app)
 
-bcrypt = Bcrypt(app)   
+bcrypt = Bcrypt(app)
 LATEST_BID=0
 # CANDIDATE  =bcrypt.gensalt()
 # COOKIE_NAME='bus-session'
@@ -82,7 +82,7 @@ class Bus(db.Document):
 
 
 def get_bid():
-    global LATEST_BID    
+    global LATEST_BID
     for bus in Bus.objects():
         if LATEST_BID<bus.bid:
             LATEST_BID=bus.bid
@@ -105,13 +105,13 @@ def token_required(f):
         token = request.headers['x-access-token']
 
         if not token:
-            return jsonify({'message' : 'Token is missing'})
-        
+            return abort(401)
+
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms = 'HS256')
             BusMan = BusManager.objects(phone = data['phone']).first()
         except Exception as e:
-            return jsonify({'message':'Token is invalid'})
+            return abort(401)
 
         return f(*args, **kwargs)
     return decorated
@@ -122,13 +122,13 @@ def token_required_get_user(f):
         token = request.headers['x-access-token']
 
         if not token:
-            return jsonify({'message' : 'Token is missing'})
-        
+            return abort(401)
+
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms = 'HS256')
             BusMan = BusManager.objects(phone = data['phone']).first()
         except Exception as e:
-            return jsonify({'message':'Token is invalid'})
+            return abort(401)
 
         return f(BusMan,*args, **kwargs)
     return decorated
@@ -141,7 +141,7 @@ def query_logins():
 
     if obj and password == obj.first().password:
 
-        token = jwt.encode({'phone' : phone, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
+        token = jwt.encode({'phone' : phone, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(seconds=15)}, app.config['SECRET_KEY'])
 
         return jsonify({'token' : token})
     else:
@@ -174,10 +174,10 @@ def nearby():
             eles.append(bus)
             vals.append(val)
             print(vals)
-        
+
         # i+=1
-    return jsonify(eles) 
-    
+    return jsonify(eles)
+
     #return jsonify(eles)
     # return jsonify(Bus.objects()[:5])
 
@@ -186,11 +186,11 @@ def nearby():
 def authen():
     return jsonify({"message" : "you're authenticated"})
 
-@app.route('/registration',methods=['POST'])    
+@app.route('/registration',methods=['POST'])
 def register():
     args = request.get_json()
     phone=args['phone']
-    password=args['password'] 
+    password=args['password']
     if BusManager.objects(phone=phone)==[]:
         BusManager(phone=phone,password=password,busIds=[]).save()
         return make_response("",200)
@@ -238,7 +238,7 @@ def new_bus(current_user):
     return make_response("",200)
 
 
-     
+
 
     # return abort(401)
 

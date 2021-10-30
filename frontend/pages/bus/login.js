@@ -42,12 +42,17 @@ export default function BusLoginPage() {
     resolver: yupResolver(schema),
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { user, login, error } = useAuth();
-  const { push } = useRouter();
+  const { user, login, error, logout } = useAuth();
+  const { push, query } = useRouter();
 
   useEffect(() => {
+    if (query.logout) {
+      logout();
+      return;
+    }
+
     if (user) push("/bus/dashboard");
-  }, [user, push]);
+  }, [user, push, query]);
 
   const toggleShowPassword = () => setShowPassword((prevState) => !prevState);
 
