@@ -34,4 +34,4 @@ export const removeToken = () => {
 };
 
 export const getTimeDifference = (NOW, time_since_update) =>
-  (NOW.getTime() - time_since_update) / (1000 * 60);
+  (NOW.getTime() / 1000 - time_since_update) / 60;

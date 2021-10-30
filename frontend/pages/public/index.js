@@ -109,11 +109,9 @@ export default function PublicIndexPage() {
 
             data.forEach((bus) => {
               const isParked =
-                getTimeDifference(NOW, bus.time_since_update) > 30;
+                getTimeDifference(NOW, bus.time_since_update) > 200;
 
-              console.log(getTimeDifference(NOW, bus.time_since_update));
-
-              const title = `${bus.reg + isParked ? " (Parked)" : ""}`;
+              const title = `${bus.reg} ${isParked ? "(Parked)" : ""}`;
 
               const busMarker = new google.maps.Marker({
                 position: {
