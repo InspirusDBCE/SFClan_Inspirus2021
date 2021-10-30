@@ -46,7 +46,7 @@ export default function BusRegisterPage() {
     resolver: yupResolver(schema),
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { user, register: registerUser } = useAuth();
+  const { user, register: registerUser, error } = useAuth();
   const { push } = useRouter();
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function BusRegisterPage() {
     <Container centerContent minH="100vh">
       <Flex height="100vh" alignItems="center">
         <VStack spacing={8}>
-          <Heading>Bus Register</Heading>
+          <Heading textAlign="center">Bus Manager Registration</Heading>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <VStack spacing={4}>
@@ -112,6 +112,10 @@ export default function BusRegisterPage() {
                 <FormErrorMessage>
                   {errors.confirmPassword?.message}
                 </FormErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={error}>
+                <FormErrorMessage>{error}</FormErrorMessage>
               </FormControl>
 
               <Button

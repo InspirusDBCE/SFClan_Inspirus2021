@@ -58,7 +58,7 @@ export default function BusLoginPage() {
   return (
     <PublicLayout>
       <VStack spacing={8}>
-        <Heading>Bus Login</Heading>
+        <Heading textAlign="center">Bus Manager Login</Heading>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack spacing={4}>
