@@ -8,6 +8,11 @@ from flask_mongoengine.wtf import model_form
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user 
 from flask_bcrypt import Bcrypt
 from functools import wraps
+import requests
+import smtplib
+from creds import api_key
+
+
 # import jwt
 import json
 from flask_cors import CORS
@@ -148,12 +153,37 @@ def okok():
 
 @app.route('/nearby',methods=['POST'])
 def nearby():
-    return jsonify(Bus.objects()[:5])
+
+    user_lat = request.get_json().get("lat")
+    user_long = request.get_json().get("long")
+
+    # user_lat = 15.293692
+    # user_long = 73.966874
+
+
+    base_url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
+    eles=[]
+    # idx=[]
+    vals=[]
+    # i=0
+    for bus in Bus.objects:
+        r = requests.get( base_url + 'origins=' + str(bus.curr_lat) + ',' + str(bus.curr_long )+ '&destinations=' + str(user_lat) + ',' + str(user_long) +'&key='+api_key)
+        val=r.json()['rows'][0]['elements'][0]['duration']['value']
+        if val<900:
+            eles.append(bus)
+            vals.append(val)
+            print(vals)
+        
+        # i+=1
+    return jsonify(eles) 
+    
+    #return jsonify(eles)
+    # return jsonify(Bus.objects()[:5])
 
 @app.route('/authentication',methods=['GET'])
 @token_required
 def authen():
-    return jsonify({"message" : "you're authenticated bitch"})
+    return jsonify({"message" : "you're authenticated"})
 
 @app.route('/registration',methods=['POST'])    
 def register():
