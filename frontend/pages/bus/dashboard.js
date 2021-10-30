@@ -17,6 +17,7 @@ import withAuth from "../../components/withAuth";
 function BusDashboardPage() {
   const [buses, setBuses] = useState([]);
   const toast = useToast();
+
   useEffect(() => {
     async function load() {
       try {
@@ -34,7 +35,7 @@ function BusDashboardPage() {
     }
 
     load();
-  }, []);
+  }, [toast]);
 
   const handleBusClick = (bus) => {
     toast({

@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Avatar,
-  Link,
   Button,
   Menu,
   MenuButton,
@@ -18,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import useAuth from "../contexts/auth";
+import Link from "./Link";
 
 const NavLink = ({ children }) => (
   <Link
@@ -44,7 +44,10 @@ export default function Header() {
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Link href="/">
-            <Box>App Name</Box>
+            <Flex alignItems="center">
+              <img src="/icons/icon-72x72.png" alt="Logo" width="24" />
+              <Box pl={2}>App Name</Box>
+            </Flex>
           </Link>
 
           <Flex alignItems={"center"}>
@@ -98,6 +101,10 @@ export default function Header() {
                       <MenuItem>Bus Manager</MenuItem>
                     </Link>
                   )}
+
+                  <Link href="/public">
+                    <MenuItem>Public</MenuItem>
+                  </Link>
                 </MenuList>
               </Menu>
             </Stack>

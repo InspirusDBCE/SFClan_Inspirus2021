@@ -6,7 +6,6 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -14,12 +13,7 @@ export default function Home() {
     <Container centerContent minH="100vh">
       <Flex height="100vh" alignItems="center">
         <VStack spacing={8}>
-          <Image
-            src="/icons/icon-72x72.png"
-            width={72}
-            height={72}
-            alt="Logo"
-          />
+          <img src="/icons/icon-72x72.png" width={72} height={72} alt="Logo" />
 
           <Heading>App Name</Heading>
 

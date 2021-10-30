@@ -20,6 +20,7 @@ import * as yup from "yup";
 import { useEffect, useState } from "react";
 import useAuth from "../../contexts/auth";
 import { useRouter } from "next/router";
+import PublicLayout from "../../layouts/public";
 
 const schema = yup
   .object({
@@ -60,79 +61,75 @@ export default function BusRegisterPage() {
   }
 
   return (
-    <Container centerContent minH="100vh">
-      <Flex height="100vh" alignItems="center">
-        <VStack spacing={8}>
-          <Heading textAlign="center">Bus Manager Registration</Heading>
+    <PublicLayout>
+      <VStack spacing={8}>
+        <Heading textAlign="center">Bus Manager Registration</Heading>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <VStack spacing={4}>
-              <FormControl isInvalid={errors.phone}>
-                <FormLabel htmlFor="phone">Phone Number</FormLabel>
-                <InputGroup>
-                  <InputLeftAddon>+01</InputLeftAddon>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="1234567890"
-                    {...register("phone")}
-                  />
-                </InputGroup>
-                <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={errors.password}>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <InputGroup>
-                  <Input
-                    id="password"
-                    type={!showPassword ? "password" : "text"}
-                    placeholder="password"
-                    {...register("password")}
-                  />
-                  <InputRightElement width="4.5rem">
-                    <Button size="sm" onClick={toggleShowPassword}>
-                      {showPassword ? "Hide" : "Show"}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={errors.confirmPassword}>
-                <FormLabel htmlFor="confirmPassword">
-                  Confirm Password
-                </FormLabel>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <VStack spacing={4}>
+            <FormControl isInvalid={errors.phone}>
+              <FormLabel htmlFor="phone">Phone Number</FormLabel>
+              <InputGroup>
+                <InputLeftAddon>+01</InputLeftAddon>
                 <Input
-                  id="confirmPassword"
-                  type={!showPassword ? "password" : "text"}
-                  placeholder="confirm password"
-                  {...register("confirmPassword")}
+                  id="phone"
+                  type="tel"
+                  placeholder="1234567890"
+                  {...register("phone")}
                 />
-                <FormErrorMessage>
-                  {errors.confirmPassword?.message}
-                </FormErrorMessage>
-              </FormControl>
+              </InputGroup>
+              <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
+            </FormControl>
 
-              <FormControl isInvalid={error}>
-                <FormErrorMessage>{error}</FormErrorMessage>
-              </FormControl>
+            <FormControl isInvalid={errors.password}>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <InputGroup>
+                <Input
+                  id="password"
+                  type={!showPassword ? "password" : "text"}
+                  placeholder="password"
+                  {...register("password")}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button size="sm" onClick={toggleShowPassword}>
+                    {showPassword ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            </FormControl>
 
-              <Button
-                isFullWidth
-                mt={4}
-                isLoading={isSubmitting}
-                type="submit"
-                color="blue.400"
-              >
-                Register Now
-              </Button>
-            </VStack>
-          </form>
+            <FormControl isInvalid={errors.confirmPassword}>
+              <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
+              <Input
+                id="confirmPassword"
+                type={!showPassword ? "password" : "text"}
+                placeholder="confirm password"
+                {...register("confirmPassword")}
+              />
+              <FormErrorMessage>
+                {errors.confirmPassword?.message}
+              </FormErrorMessage>
+            </FormControl>
 
-          <Link href="/bus/login">Already have an account? Login Now</Link>
-        </VStack>
-      </Flex>
-    </Container>
+            <FormControl isInvalid={error}>
+              <FormErrorMessage>{error}</FormErrorMessage>
+            </FormControl>
+
+            <Button
+              isFullWidth
+              mt={4}
+              isLoading={isSubmitting}
+              type="submit"
+              color="blue.400"
+            >
+              Register Now
+            </Button>
+          </VStack>
+        </form>
+
+        <Link href="/bus/login">Already have an account? Login Now</Link>
+      </VStack>
+    </PublicLayout>
   );
 }

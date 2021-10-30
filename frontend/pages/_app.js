@@ -1,9 +1,10 @@
-import { ChakraProvider } from "@chakra-ui/react";
-import "../styles/globals.css";
-import { AuthProvider } from "../contexts/auth";
+import {ChakraProvider} from "@chakra-ui/react";
+import {AnimatePresence} from "framer-motion";
 import Head from "next/head";
+import {AuthProvider} from "../contexts/auth";
+import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, router }) {
   return (
     <ChakraProvider>
       <AuthProvider>
@@ -33,7 +34,9 @@ function MyApp({ Component, pageProps }) {
 
           <meta name="theme-color" content="#4299e1" />
         </Head>
-        <Component {...pageProps} />
+        <AnimatePresence exitBeforeEnter>
+            <Component {...pageProps} key={router.route} />
+        </AnimatePresence>
       </AuthProvider>
     </ChakraProvider>
   );

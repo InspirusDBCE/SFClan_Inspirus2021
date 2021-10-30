@@ -146,20 +146,21 @@ export default function PublicIndexPage() {
     }
 
     load();
-  }, [search, userLocation, userLocationLoaded]);
+  }, [search, userLocation, userLocationLoaded, toast]);
 
   return (
     <PublicLayout>
-      <VStack spacing={8}>
-        <Box id="map" mt={2} minHeight={400} minWidth="80vw" />
+      <VStack spacing={4}>
+        <Box id="map" mb={2} minHeight={400} minWidth="80vw" />
 
-        <FormControl>
+        <FormControl pb={16}>
           <FormLabel htmlFor="location">Where do you wish to go ?</FormLabel>
 
           <Input
             id="location"
             placeholder="Panaji Bus Stand"
             onChange={handleSearch}
+            maxW={200}
           />
         </FormControl>
       </VStack>
