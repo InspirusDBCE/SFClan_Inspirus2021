@@ -1,3 +1,5 @@
+/* eslint-disable react/display-name */
+
 import { useRouter } from "next/router";
 import useAuth from "../contexts/auth";
 import AuthLayout from "../layouts/auth";
@@ -11,7 +13,7 @@ export default function withAuth(Component) {
 
     return (
       <AuthLayout>
-        <Component />
+        <Component {...props} />
       </AuthLayout>
     );
   };

@@ -16,18 +16,18 @@ function BusDashboardPage() {
       <Flex justifyContent="space-between" alignItems="center">
         <Heading>Dashboard</Heading>
 
-        <Link href="/bus/add">
+        <Link href="/bus/add" passHref>
           <Button variant="outline">Add Bus</Button>
         </Link>
       </Flex>
 
       <Box mt={8}>
         <VStack spacing={8} alignItems="stretch">
-          <Link href="/bus/1">
+          <Link href="/bus/1" passHref>
             <Button>GA01T1234</Button>
           </Link>
 
-          <Link href="/bus/2">
+          <Link href="/bus/2" passHref>
             <Button>GA02T1234</Button>
           </Link>
         </VStack>

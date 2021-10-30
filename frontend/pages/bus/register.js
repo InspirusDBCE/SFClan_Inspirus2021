@@ -51,7 +51,7 @@ export default function BusRegisterPage() {
 
   useEffect(() => {
     if (user) push("/bus/dashboard");
-  }, [user]);
+  }, [user, push]);
 
   const toggleShowPassword = () => setShowPassword((prevState) => !prevState);
 
@@ -70,7 +70,7 @@ export default function BusRegisterPage() {
               <FormControl isInvalid={errors.phone}>
                 <FormLabel htmlFor="phone">Phone Number</FormLabel>
                 <InputGroup>
-                  <InputLeftAddon children="+91" />
+                  <InputLeftAddon>+01</InputLeftAddon>
                   <Input
                     id="phone"
                     type="tel"

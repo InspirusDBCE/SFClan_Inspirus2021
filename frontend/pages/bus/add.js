@@ -133,7 +133,7 @@ function BusAddPage() {
         };
       }
     });
-  }, [search, userLocation]);
+  }, [search, userLocation, userLocationLoaded]);
 
   const handleAddLocation = () => {
     if (temp === null) return;
@@ -158,6 +158,9 @@ function BusAddPage() {
   const handleRemoveLocation = (placeId) => {
     setSchedule(schedule.filter((item) => item.place_id !== placeId));
   };
+
+  const scheduleBG = useColorModeValue("blue.400", "blue.200");
+  const scheduleTextColor = useColorModeValue("white", "gray.900");
 
   return (
     <>
@@ -189,7 +192,7 @@ function BusAddPage() {
                 {schedule.map((item) => (
                   <Flex
                     key={item.place_id}
-                    bg={useColorModeValue("blue.400", "blue.200")}
+                    bg={scheduleBG}
                     borderRadius="md"
                     mt={4}
                     p={2}
@@ -199,7 +202,7 @@ function BusAddPage() {
                   >
                     <Text
                       fontWeight="semibold"
-                      textColor={useColorModeValue("white", "gray.900")}
+                      textColor={scheduleTextColor}
                     >{`${item.name} - ${item.time}`}</Text>
 
                     <IconButton
