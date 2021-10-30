@@ -141,7 +141,7 @@ def query_logins():
 
     if obj and password == obj.first().password:
 
-        token = jwt.encode({'phone' : phone, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(seconds=15)}, app.config['SECRET_KEY'])
+        token = jwt.encode({'phone' : phone, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, app.config['SECRET_KEY'])
 
         return jsonify({'token' : token})
     else:
