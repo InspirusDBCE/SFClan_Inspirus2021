@@ -78,7 +78,12 @@ function BusAddPage() {
 
   async function onSubmit(values) {
     try {
-      await Bus.add({ ...values, schedule });
+      await Bus.add({
+        ...values,
+        schedule: schedule.sort(
+          (a, b) => Number(a.time.split(":")[0]) - Number(b.time.split(":")[0])
+        ),
+      });
 
       toast({
         title: "Bus added",
@@ -130,9 +135,9 @@ function BusAddPage() {
 
     service.findPlaceFromQuery(request, function (results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          console.log(results[i]);
-        }
+        // for (var i = 0; i < results.length; i++) {
+        //   console.log(results[i]);
+        // }
 
         const position = results[0].geometry.location;
         map.setCenter(position);

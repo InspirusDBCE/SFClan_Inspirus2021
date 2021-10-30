@@ -68,7 +68,22 @@ export const AuthProvider = ({ children }) => {
       return true;
     } catch (err) {
       console.error(err);
-      setError(err?.message || "Something went wrong");
+
+      const status = err?.response?.status;
+      let errorText = "";
+
+      if (status >= 500) errorText = "Something went wrong";
+      else if (status === 409)
+        errorText = "A Bus Manager with that phone already exists";
+      else errorText = "Wrong Phone/Password";
+
+      setError(errorText);
+      toast({
+        title: errorText,
+        description: "Please Try again",
+        status: "warning",
+      });
+
       return false;
     }
   };

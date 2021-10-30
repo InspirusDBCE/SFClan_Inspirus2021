@@ -24,7 +24,7 @@ export default function Home() {
           <Heading>App Name</Heading>
 
           <Link href="/bus/login" passHref>
-            <Button size="lg">Bus</Button>
+            <Button size="lg">Bus Manager</Button>
           </Link>
 
           <Link href="/public" passHref>

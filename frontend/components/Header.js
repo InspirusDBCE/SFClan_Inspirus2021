@@ -95,7 +95,7 @@ export default function Header() {
                     </>
                   ) : (
                     <Link href="/bus/login">
-                      <MenuItem>Bus Login</MenuItem>
+                      <MenuItem>Bus Manager</MenuItem>
                     </Link>
                   )}
                 </MenuList>

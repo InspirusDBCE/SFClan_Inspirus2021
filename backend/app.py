@@ -190,8 +190,11 @@ def register():
     args = request.get_json()
     phone=args['phone']
     password=args['password'] 
-    BusManager(phone=phone,password=password,busIds=[]).save()
-    return make_response("",200)
+    if BusManager.objects(phone=phone)==[]:
+        BusManager(phone=phone,password=password,busIds=[]).save()
+        return make_response("",200)
+    else:
+        return abort(409)
 
 
 
