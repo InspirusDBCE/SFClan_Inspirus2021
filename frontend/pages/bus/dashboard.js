@@ -9,6 +9,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Bus from "../../apis/bus";
@@ -59,12 +60,29 @@ function BusDashboardPage() {
 
       <Box mt={8}>
         <VStack spacing={4} alignItems="stretch">
-          <Text>Your Buses</Text>
+          <Text textAlign="center">Your Buses</Text>
 
-          {buses.map((item) => (
-            <Button key={item.bid} onClick={() => handleBusClick(item)}>
-              {item.reg}
-            </Button>
+          {buses?.map((item, index) => (
+            <motion.div
+              initial={{
+                translateY: 30,
+                opacity: 0,
+              }}
+              animate={{
+                translateY: 0,
+                opacity: 1,
+              }}
+              transition={{
+                ease: "easeInOut",
+                duration: 0.4,
+                delay: index / 10,
+              }}
+              key={item.bid}
+            >
+              <Button isFullWidth onClick={() => handleBusClick(item)}>
+                {item.reg}
+              </Button>
+            </motion.div>
           ))}
         </VStack>
       </Box>

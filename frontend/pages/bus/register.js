@@ -76,6 +76,7 @@ export default function BusRegisterPage() {
                   type="tel"
                   placeholder="1234567890"
                   {...register("phone")}
+                  autoFocus
                 />
               </InputGroup>
               <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>

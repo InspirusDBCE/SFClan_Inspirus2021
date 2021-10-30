@@ -32,3 +32,6 @@ export const getToken = () => {
 export const removeToken = () => {
   destroyCookie(null, "token");
 };
+
+export const getTimeDifference = (NOW, time_since_update) =>
+  (NOW.getTime() - time_since_update) / (1000 * 60);

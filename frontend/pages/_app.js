@@ -1,7 +1,7 @@
-import {ChakraProvider} from "@chakra-ui/react";
-import {AnimatePresence} from "framer-motion";
+import { ChakraProvider } from "@chakra-ui/react";
+import { AnimatePresence } from "framer-motion";
 import Head from "next/head";
-import {AuthProvider} from "../contexts/auth";
+import { AuthProvider } from "../contexts/auth";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps, router }) {
@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps, router }) {
           <meta name="theme-color" content="#4299e1" />
         </Head>
         <AnimatePresence exitBeforeEnter>
-            <Component {...pageProps} key={router.route} />
+          <Component {...pageProps} key={router.route} />
         </AnimatePresence>
       </AuthProvider>
     </ChakraProvider>

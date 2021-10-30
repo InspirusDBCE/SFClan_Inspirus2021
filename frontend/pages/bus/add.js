@@ -1,8 +1,7 @@
-import { DeleteIcon, SearchIcon } from "@chakra-ui/icons";
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Container,
   Divider,
   Flex,
   FormControl,
@@ -21,8 +20,8 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
-  VStack,
   useToast,
+  VStack,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import debounce from "lodash.debounce";
@@ -32,10 +31,10 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import Bus from "../../apis/bus";
+import withAuth from "../../components/withAuth";
 import useUserLocation from "../../hooks/useUserLocation";
 import { formatTime } from "../../utils";
-import withAuth from "../../components/withAuth";
-import Bus from "../../apis/bus";
 
 const schema = yup
   .object({
@@ -193,7 +192,12 @@ function BusAddPage() {
           <VStack spacing={4} textAlign="left">
             <FormControl isInvalid={errors.reg}>
               <FormLabel htmlFor="reg">Registration Number</FormLabel>
-              <Input id="reg" placeholder="GA01T1234" {...register("reg")} />
+              <Input
+                id="reg"
+                placeholder="GA01T1234"
+                {...register("reg")}
+                autoFocus
+              />
               <FormErrorMessage>{errors.reg?.message}</FormErrorMessage>
             </FormControl>
 
@@ -257,7 +261,11 @@ function BusAddPage() {
           <ModalHeader>Add Location</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input placeholder="Location to add" onChange={handleSearch} />
+            <Input
+              placeholder="Location to add"
+              onChange={handleSearch}
+              autoFocus
+            />
 
             <Box color={useColorModeValue("gray.900", "white")} mt={2}>
               <Datetime

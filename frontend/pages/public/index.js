@@ -11,6 +11,9 @@ import { useEffect, useState } from "react";
 import Bus from "../../apis/bus";
 import useUserLocation from "../../hooks/useUserLocation";
 import PublicLayout from "../../layouts/public";
+import { getTimeDifference } from "../../utils";
+
+const NOW = new Date();
 
 export default function PublicIndexPage() {
   const {
@@ -105,23 +108,30 @@ export default function PublicIndexPage() {
             const { data } = await Bus.nearby({ destination, userLocation });
 
             data.forEach((bus) => {
+              const isParked =
+                getTimeDifference(NOW, bus.time_since_update) > 30;
+
+              console.log(getTimeDifference(NOW, bus.time_since_update));
+
+              const title = `${bus.reg + isParked ? " (Parked)" : ""}`;
+
               const busMarker = new google.maps.Marker({
                 position: {
                   lat: bus.curr_lat,
                   lng: bus.curr_long,
                 },
                 map,
-                title: bus.reg,
-                icon: "/icons/bus.png",
+                title,
+                icon: `/icons/${isParked ? "parked" : "bus"}.png`,
               });
 
               busMarker.addListener("click", () => {
                 toast({
-                  title: bus.reg,
+                  title,
                   description: bus.sc_name
                     .map((name, index) => `${name} - ${bus.sc_time[index]}`)
                     .join(" | "),
-                  status: "info",
+                  status: isParked ? "warning" : "info",
                 });
               });
             });
@@ -161,6 +171,7 @@ export default function PublicIndexPage() {
             placeholder="Panaji Bus Stand"
             onChange={handleSearch}
             maxW={200}
+            autoFocus
           />
         </FormControl>
       </VStack>
