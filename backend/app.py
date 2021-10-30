@@ -154,8 +154,9 @@ def okok():
 @app.route('/nearby',methods=['POST'])
 def nearby():
 
-    user_lat = request.get_json().get("lat")
-    user_long = request.get_json().get("long")
+    user_lat = request.get_json().get("userLocation")["lat"]
+    user_long = request.get_json().get("userLocation")["lng"]
+
 
     # user_lat = 15.293692
     # user_long = 73.966874
